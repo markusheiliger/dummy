@@ -18,7 +18,7 @@ jobs:
       run: git fetch --prune --unshallow
 
     - name: Setup GitVersion
-      uses: GitTools/actions@v0.6.2
+      uses: gittools/actions/gitversion/setup@v0.6.1
       with:
         versionSpec: '5.x' 
 
