@@ -13,6 +13,8 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
+      with:
+        fetch-depth: 0
       
     - name: Fetch Code History
       run: git fetch #--prune --unshallow
