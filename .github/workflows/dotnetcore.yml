@@ -17,6 +17,11 @@ jobs:
     - name: Fetch Code History
       run: git fetch --prune --unshallow
 
+    - name: Setup GitVersion (DOCKER)
+      uses: docker://gittools/gitversion
+      with:
+        args: '-nocache -output buildserver'
+        
     - name: Setup GitVersion
       uses: gittools/actions/gitversion/setup@v0.6.1
       with:
