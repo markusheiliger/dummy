@@ -23,7 +23,11 @@ jobs:
           versionSpec: '5.1.x'
 
     - name: Update GitVersion
-      run: sed -i "s/^next-version:.*$/next-version: $(git describe --always --abbrev=0 --tags)/" GitVersion.yml && cat GitVersion.yml
+      run: |
+        # resolve next version from tag history
+        NEXT_VERSION=$(git describe --always --abbrev=0 --tags) 
+        sed -i "s/^next-version:.*$/next-version: $NEXT_VERSION/" GitVersion.yml 
+        cat GitVersion.yml
 
     - name: Execute GitVersion
       id: gitversion # step id used as reference for output values
