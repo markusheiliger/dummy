@@ -21,6 +21,7 @@ jobs:
       run: |
         NEXT_VERSION=$(git describe --always --abbrev=0 --tags)
         sed -i "s/^next-version:.*$/next-version: $NEXT_VERSION/" GitVersion.yml
+        cat GitVersion.yml
         
     - name: Setup GitVersion (DOCKER)
       uses: docker://gittools/gitversion
