@@ -47,8 +47,8 @@ jobs:
     - name: Build and Package
       run:  |
         versionPrefix="${{ steps.gitversion.outputs.majorMinorPatch }}"
-        versionSuffix="${{ github.sha }}"
-        dotnet build -c $BUILD_CONFIGURATION -p:VersionPrefix="${versionPrefix}" --version-suffix "v${versionSuffix:0:7}"
+        versionSuffix="${{ setps.gitversion.outputs.nuGetPreReleaseTagV2 }}"
+        dotnet build -c $BUILD_CONFIGURATION -p:VersionPrefix="${versionPrefix}" --version-suffix "${versionSuffix}"
       working-directory: ./dummy
 
     - name: Push packages to GitHub 
