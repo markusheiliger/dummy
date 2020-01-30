@@ -13,23 +13,18 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
 
-    #- name: Checkout Code (TAGS)
-    #  run: git fetch --depth 0 --prune --unshallow
-        
-    - name: Prepare Code
-      run: |
-        NEXT_VERSION=$(git describe --always --abbrev=0 --tags)
-        sed -i "s/^next-version:.*$/next-version: $NEXT_VERSION/" GitVersion.yml
-        cat GitVersion.yml
+    - name: Checkout Tags
+      run: git fetch --depth=1 origin +refs/tags/*:refs/tags/*
         
     - name: Setup GitVersion
       uses: gittools/actions/gitversion/setup@v0.6.1
       with:
           versionSpec: '5.1.x'
-    
+
+    - name: Update GitVersion
+      run: sed -i "s/^next-version:.*$/next-version: $(git describe --always --abbrev=0 --tags)/" GitVersion.yml && cat GitVersion.yml
+
     - name: Execute GitVersion
       id: gitversion # step id used as reference for output values
       uses: gittools/actions/gitversion/execute@v0.6.1
