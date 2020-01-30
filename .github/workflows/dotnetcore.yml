@@ -18,10 +18,13 @@ jobs:
       run: git fetch --prune --unshallow
 
     - name: Setup GitVersion
-      id: gitversion
-      uses: docker://gittools/gitversion
+      uses: gittools/actions/gitversion/setup@v0.6.1
       with:
-        args: '-nocache -output buildserver'
+          versionSpec: '5.1.x'
+    
+    - name: Execute GitVersion
+      id: gitversion # step id used as reference for output values
+      uses: gittools/actions/gitversion/execute@v0.6.1
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
