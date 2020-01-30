@@ -13,11 +13,11 @@ jobs:
     steps:
     - name: Checkout Code
       uses: actions/checkout@v2
-      with:
-        fetch-depth: 0
+      #with:
+      #  fetch-depth: 0
 
     - name: Fetch Code # still needed to support gitversion actions
-      run: git fetch --prune --unshallow
+      run: git fetch --depth 0 --prune --unshallow
         
     - name: Prepare Code
       run: |
