@@ -17,19 +17,24 @@ jobs:
         fetch-depth: 0
 
     - name: Checkout Tags
-      run: git fetch -t #git fetch --depth=1 origin +refs/tags/*:refs/tags/*
+      run: git fetch -t
         
     - name: Setup GitVersion
       uses: gittools/actions/gitversion/setup@v0.6.1
       with:
           versionSpec: '5.1.x'
 
-    - name: Update GitVersion
+    - name: Setup GitVersion (config)
       run: |
-        # resolve next version from tag history
-        NEXT_VERSION=$(git describe --always --abbrev=0 --tags) 
-        sed -i "s/^next-version:.*$/next-version: $NEXT_VERSION/" GitVersion.yml 
+        sed -i "s/^next-version:.*$/next-version: $(git describe --always --abbrev=0 --tags)/" GitVersion.yml 
         cat GitVersion.yml
+        
+#    - name: Update GitVersion
+#      run: |
+#        # resolve next version from tag history
+#        NEXT_VERSION=$(git describe --always --abbrev=0 --tags) 
+#        sed -i "s/^next-version:.*$/next-version: $NEXT_VERSION/" GitVersion.yml 
+#        cat GitVersion.yml
 
     - name: Execute GitVersion
       id: gitversion # step id used as reference for output values
