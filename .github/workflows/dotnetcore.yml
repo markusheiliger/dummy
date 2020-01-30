@@ -19,7 +19,7 @@ jobs:
 
     - name: Setup NextVersion
       run: |
-        NEXT_VERSION=$(git describe --abbrev=0 --tags)
+        NEXT_VERSION=$(git describe --always --abbrev=0 --tags)
         sed -i "s/^next-version:.*$/next-version: $NEXT_VERSION/" GitVersion.yml
         
     - name: Setup GitVersion (DOCKER)
