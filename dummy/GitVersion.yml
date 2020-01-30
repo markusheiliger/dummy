@@ -1,5 +1,4 @@
-mode: ContinuousDeployment
-continuous-delivery-fallback-tag: 'prerelease'
+mode: ContinuousDelivery
 branches: {}
 ignore:
   sha: []
