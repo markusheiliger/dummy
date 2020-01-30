@@ -28,7 +28,7 @@ jobs:
       run: |
         PRERELEASETAG=$([ -z "$(git describe --tags --exact-match $(git rev-parse HEAD) 2> /dev/null)" ] && echo "" || echo "beta" )
         sed -i "s/^next-version:.*$/next-version: $(git describe --always --abbrev=0 --tags)/" GitVersion.yml 
-        sed -i "s/ tag:.*$/ tag: $PRERELEASETAG/" GitVersion.yml 
+        sed -i "s/tag: ''.*$/tag: $PRERELEASETAG/" GitVersion.yml 
         cat GitVersion.yml
 
     - name: Execute GitVersion
