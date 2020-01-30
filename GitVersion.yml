@@ -1,5 +1,5 @@
 next-version: 0.0.0
-mode: Mainline
+mode: ContinuousDeployment
 branches: 
   master:
     tag: ''
