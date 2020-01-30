@@ -16,6 +16,9 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: Fetch Code # still needed to support gitversion actions
+      run: git fetch --prune --unshallow
+        
     - name: Prepare Code
       run: |
         NEXT_VERSION=$(git describe --always --abbrev=0 --tags)
