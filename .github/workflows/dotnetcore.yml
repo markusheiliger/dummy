@@ -17,10 +17,10 @@ jobs:
     - name: Fetch Code History
       run: git fetch --prune --unshallow
 
-    - name: TEST
+    - name: Setup NextVersion
       run: |
-        git describe --tags
-        git describe --abbrev=0
+        NEXT_VERSION=$(git describe --abbrev=0 --tags)
+        sed -i "s/^next-version:.*$/next-version: $NEXT_VERSION/" GitVersion.yml
         
     - name: Setup GitVersion (DOCKER)
       uses: docker://gittools/gitversion
