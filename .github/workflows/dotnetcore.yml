@@ -52,6 +52,6 @@ jobs:
       working-directory: ./dummy
 
     - name: Push packages to GitHub 
-      run: dotnet nuget push ./bin/$BUILD_CONFIGURATION/*.nupkg --source 'github'
+      run: dotnet nuget push ./bin/$BUILD_CONFIGURATION/*.nupkg --source 'github' --skip-duplicate
       working-directory: ./dummy
 
