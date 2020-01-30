@@ -17,6 +17,11 @@ jobs:
     - name: Fetch Code History
       run: git fetch --prune --unshallow
 
+    - name: TEST
+      run: |
+        git describe --tags
+        git describe --abbrev=0
+        
     - name: Setup GitVersion (DOCKER)
       uses: docker://gittools/gitversion
       with:
