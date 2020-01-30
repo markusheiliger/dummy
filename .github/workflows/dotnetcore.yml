@@ -36,7 +36,7 @@ jobs:
       run:  |
         versionPrefix="${{ steps.gitversion.outputs.majorMinorPatch }}"
         versionSuffix="${{ github.sha }}"
-        dotnet build -c $BUILD_CONFIGURATION -p:VersionPrefix="${versionPrefix}" -p:VersionSuffix="v${versionSuffix:0:7}"
+        dotnet build -c $BUILD_CONFIGURATION -p:VersionPrefix="${versionPrefix}" --version-suffix "v${versionSuffix:0:7}"
       working-directory: ./dummy
 
     - name: Push packages to GitHub 
