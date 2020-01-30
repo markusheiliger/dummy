@@ -25,9 +25,6 @@ jobs:
     - name: Execute GitVersion
       id: gitversion # step id used as reference for output values
       uses: gittools/actions/gitversion/execute@v0.6.1
-      with:
-        useConfigFile: true
-        configFilePath: ./dummy/GitVersion.yml
 
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
