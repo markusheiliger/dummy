@@ -2,7 +2,6 @@ mode: ContinuousDelivery
 branches: 
   master:
     mode: ContinuousDeployment
-    tag: s
     increment: Patch
     prevent-increment-of-merged-branch-version: true
     track-merge-target: false
