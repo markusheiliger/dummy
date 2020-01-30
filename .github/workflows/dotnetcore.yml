@@ -14,8 +14,8 @@ jobs:
     - name: Checkout Code
       uses: actions/checkout@v2
       
-    # - name: Fetch Code History
-    #   run: git fetch --prune --unshallow
+    - name: Fetch Code History
+      run: git fetch --prune --unshallow
 
     - name: Setup GitVersion
       id: gitversion
