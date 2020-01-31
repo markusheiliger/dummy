@@ -43,33 +43,15 @@ jobs:
         dotnet-version: '3.1.101'
 
     - name: Build and Package
-      run:  |
-        VERSION_PREFIX="${{ steps.gitversion.outputs.majorMinorPatch }}"
-        VERSION_SUFFIX="${{ steps.gitversion.outputs.nuGetPreReleaseTagV2 }}"
-        dotnet build -c $BUILD_CONFIGURATION -p:VersionPrefix="$VERSION_PREFIX" --version-suffix "$VERSION_SUFFIX"
+      run:  dotnet build -c $BUILD_CONFIGURATION -p:VersionPrefix="${{ steps.gitversion.outputs.majorMinorPatch }}" --version-suffix "${{ steps.gitversion.outputs.nuGetPreReleaseTagV2 }}"
       working-directory: ${{ env.SOURCE_DIRECTORY }}
-
-    - name: Collect Artifacts (packages)
-      run: mkdir -p artifacts/packages && find . -name \*.nupkg -exec cp {} artifacts/packages \;
-    
-    - name: Upload Artifacts (packages)
-      uses: actions/upload-artifact@v1.0.0
-      with:
-        name: packages
-        path: artifacts/packages
-      
-  publish:
-    if: github.ref == 'refs/heads/master' 
-    needs: [build]
-    runs-on: ubuntu-latest
-    
-    steps:
 
     - name: Setup GitHub (packages)
       run: sed -i 's/GITHUB_TOKEN/${{ secrets.GITHUB_TOKEN }}/g' nuget.config
       working-directory: ${{ env.SOURCE_DIRECTORY }}
-
+      
     - name: Publish GitHub (packages)
-      run: dotnet nuget push ./bin/$BUILD_CONFIGURATION/*.nupkg --source 'github' --skip-duplicate
-      working-directory: ${{ env.SOURCE_DIRECTORY }}
+      if: github.ref == 'refs/heads/master'
+      run: dotnet nuget push artifacts/packages/*.nupkg --source 'github' --skip-duplicate
+      working-directory: ${{ env.SOURCE_DIRECTORY }}        
 
