@@ -56,7 +56,7 @@ jobs:
       run: dotnet nuget push ./bin/$BUILD_CONFIGURATION/*.nupkg --source 'github' --skip-duplicate
       working-directory: ${{ env.SOURCE_DIRECTORY }}        
 
-    - name: Validate Release (master & release only)
+    - name: Validate Release (master only)
       if: steps.gitversion.outputs.branchName == 'master' && steps.gitversion.outputs.commitsSinceVersionSource == 0
       run: |
         RELEASE_TAG=$(git describe --always --abbrev=0 --tags)
