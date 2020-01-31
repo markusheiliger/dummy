@@ -1,6 +1,5 @@
 next-version: 0.0.0
 mode: ContinuousDeployment
-continuous-delivery-fallback-tag: alpha.{BranchName}
 branches: 
   master:
     tag: ''
