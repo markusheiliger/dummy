@@ -37,6 +37,19 @@ jobs:
       id: gitversion # step id used as reference for output values
       uses: gittools/actions/gitversion/execute@v0.6.1
 
+    - name: Validate Release (master only)
+      if: steps.gitversion.outputs.branchName == 'master' && steps.gitversion.outputs.commitsSinceVersionSource == 0
+      run: |
+        RELEASE_TAG=$(git describe --always --abbrev=0 --tags)
+        RELEASE_URL=$(curl https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r ".url")
+        if [[ ! -z "$RELEASE_URL" ]]; then
+          if [ -z "${{ steps.gitversion.outputs.preReleaseTag }}" ]; then
+            curl --data '{"prerelease": false}' -X PATCH $RELEASE_URL -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+          else
+            curl --data '{"prerelease": true}' -X PATCH $RELEASE_URL -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
+          fi
+        fi
+      
     - name: Setup .NET Core
       uses: actions/setup-dotnet@v1
       with:
@@ -47,12 +60,12 @@ jobs:
       working-directory: ${{ env.SOURCE_DIRECTORY }}
 
     - name: Setup Packages (master only)
-      if: github.ref == 'refs/heads/master'
+      if: steps.gitversion.outputs.branchName == 'master'
       run: sed -i 's/GITHUB_TOKEN/${{ secrets.GITHUB_TOKEN }}/g' nuget.config
       working-directory: ${{ env.SOURCE_DIRECTORY }}
     
     - name: Publish Packages (master only)
-      if: github.ref == 'refs/heads/master'
+      if: steps.gitversion.outputs.branchName == 'master'
       run: dotnet nuget push ./bin/$BUILD_CONFIGURATION/*.nupkg --source 'github' --skip-duplicate
       working-directory: ${{ env.SOURCE_DIRECTORY }}        
 
