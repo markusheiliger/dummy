@@ -46,9 +46,11 @@ jobs:
 
     - name: Build and Package
       run:  |
+        BRANCH_NAME=$(echo ${GITHUB_REF##*/})
+        echo $BRANCH_NAME
         VERSION_PREFIX="${{ steps.gitversion.outputs.majorMinorPatch }}"
         VERSION_SUFFIX="${{ steps.gitversion.outputs.nuGetPreReleaseTagV2 }}"
-        VERSION_SUFFIX=$([ "$(echo ${GITHUB_REF##*/})" = "master" ] && echo "$VERSION_SUFFIX" || echo "alpha-$VERSION_SUFFIX" )
+        VERSION_SUFFIX=$([ "$BRANCH_NAME" = "master" ] && echo "$VERSION_SUFFIX" || echo "alpha-$VERSION_SUFFIX" )
         dotnet build -c $BUILD_CONFIGURATION -p:VersionPrefix="$VERSION_PREFIX" --version-suffix "$VERSION_SUFFIX"
       working-directory: ./dummy
 
