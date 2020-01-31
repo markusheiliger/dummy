@@ -29,7 +29,6 @@ jobs:
     - name: Setup GitVersion (config)
       run: |
         # Update GitVersion.yml
-        # PRERELEASETAG=$([ -z "$(git describe --tags --exact-match $(git rev-parse HEAD) 2> /dev/null)" ] && echo "beta-" || echo "''" )
         sed -i "s/^next-version:.*$/next-version: $(git describe --always --abbrev=0 --tags)/" GitVersion.yml 
         sed -i "s/tag: ''.*$/tag: $(git describe --tags --exact-match $(git rev-parse HEAD) 2> /dev/null)/" GitVersion.yml 
         cat GitVersion.yml
@@ -47,12 +46,13 @@ jobs:
       run:  dotnet build -c $BUILD_CONFIGURATION -p:VersionPrefix="${{ steps.gitversion.outputs.majorMinorPatch }}" --version-suffix "${{ steps.gitversion.outputs.nuGetPreReleaseTagV2 }}"
       working-directory: ${{ env.SOURCE_DIRECTORY }}
 
-    - name: Setup GitHub (packages)
+    - name: Setup Packages (master only)
+      if: github.ref == 'refs/heads/master'
       run: sed -i 's/GITHUB_TOKEN/${{ secrets.GITHUB_TOKEN }}/g' nuget.config
       working-directory: ${{ env.SOURCE_DIRECTORY }}
       
-    - name: Publish GitHub (packages)
+    - name: Publish Packages (master only)
       if: github.ref == 'refs/heads/master'
-      run: dotnet nuget push artifacts/packages/*.nupkg --source 'github' --skip-duplicate
+      run: dotnet nuget **/*.nupkg --source 'github' --skip-duplicate
       working-directory: ${{ env.SOURCE_DIRECTORY }}        
 
