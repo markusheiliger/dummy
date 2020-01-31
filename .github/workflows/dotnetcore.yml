@@ -21,12 +21,12 @@ jobs:
     - name: Checkout Tags
       run: git fetch -t
         
-    - name: Setup GitVersion
+    - name: Setup GitVersion (install)
       uses: gittools/actions/gitversion/setup@v0.6.1
       with:
           versionSpec: '5.1.x'
 
-    - name: Setup GitVersion (config)
+    - name: Setup GitVersion (configure)
       run: |
         # Update GitVersion.yml
         sed -i "s/^next-version:.*$/next-version: $(git describe --always --abbrev=0 --tags)/" GitVersion.yml 
@@ -53,7 +53,7 @@ jobs:
     
     - name: Collect Packages (master only)
       if: github.ref == 'refs/heads/master'
-      run: mkdir -p ./_packages && find . -name ./**/*.nupkg -exec cp {} ./_packages
+      run: mkdir -p ./_packages && find . -name ./**/*.nupkg -exec cp {} ./_packages \;
       working-directory: ${{ env.SOURCE_DIRECTORY }}
       
     - name: Publish Packages (master only)
