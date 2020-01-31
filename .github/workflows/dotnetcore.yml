@@ -51,13 +51,8 @@ jobs:
       run: sed -i 's/GITHUB_TOKEN/${{ secrets.GITHUB_TOKEN }}/g' nuget.config
       working-directory: ${{ env.SOURCE_DIRECTORY }}
     
-    - name: Collect Packages (master only)
-      if: github.ref == 'refs/heads/master'
-      run: mkdir -p ./_packages && find . -name ./**/*.nupkg -exec cp {} ./_packages \;
-      working-directory: ${{ env.SOURCE_DIRECTORY }}
-      
     - name: Publish Packages (master only)
       if: github.ref == 'refs/heads/master'
-      run: dotnet nuget ./_packages/*.nupkg --source 'github' --skip-duplicate
+      run: dotnet nuget push ./bin/$BUILD_CONFIGURATION/*.nupkg --source 'github' --skip-duplicate
       working-directory: ${{ env.SOURCE_DIRECTORY }}        
 
