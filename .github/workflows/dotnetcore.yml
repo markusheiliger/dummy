@@ -29,8 +29,8 @@ jobs:
     - name: Setup GitVersion (configure)
       run: |
         # Update GitVersion.yml
-        sed -i "s/^next-version:.*$/next-version: $(git describe --always --abbrev=0 --tags)/" GitVersion.yml 
-        sed -i "s/tag: ''.*$/tag: $(git describe --tags --exact-match $(git rev-parse HEAD) 2> /dev/null)/" GitVersion.yml 
+        # sed -i "s/^next-version:.*$/next-version: $(git describe --always --abbrev=0 --tags)/" GitVersion.yml 
+        # sed -i "s/tag: ''.*$/tag: $(git describe --tags --exact-match $(git rev-parse HEAD) 2> /dev/null)/" GitVersion.yml 
         cat GitVersion.yml
 
     - name: Execute GitVersion
