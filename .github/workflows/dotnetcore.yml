@@ -63,10 +63,10 @@ jobs:
         RELEASE_URL=$(curl https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r ".url")
         if [[ ! -z "$RELEASE_URL" ]]; then
           if [ -z "${{ steps.gitversion.outputs.preReleaseTag }}" ]; then
-            # there is no pre-release tag -> ensure our release is tagged as major release
+            echo "Ensure release $RELEASE_TAG is set to major release"
             curl --data '{"prerelease": false}' -X PATCH $RELEASE_URL -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
           else
-            # there is a pre-release tag -> ensure our release is tagged as pre release
+            echo "Ensure release $RELEASE_TAG is set to pre release"
             curl --data '{"prerelease": true}' -X PATCH $RELEASE_URL -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
           fi
         fi
