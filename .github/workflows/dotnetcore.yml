@@ -53,6 +53,6 @@ jobs:
       
     - name: Publish Packages (master only)
       if: github.ref == 'refs/heads/master'
-      run: dotnet nuget **/*.nupkg --source 'github' --skip-duplicate
+      run: dotnet nuget ./**/*.nupkg --source 'github' --skip-duplicate
       working-directory: ${{ env.SOURCE_DIRECTORY }}        
 
