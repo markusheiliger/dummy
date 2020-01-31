@@ -69,4 +69,6 @@ jobs:
             echo "Ensure release $RELEASE_TAG is set to pre release"
             curl --data '{"prerelease": true}' -X PATCH $RELEASE_URL -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
           fi
+        else
+          echo "Tag $RELEASE_TAG is not assigned to a release"
         fi
