@@ -30,7 +30,7 @@ jobs:
         if [ -z "$(git describe --tags --exact-match $(git rev-parse HEAD) 2> /dev/null)" ]; then
           PRERELEASETAG="beta-"
         else
-          PRERELEASEFLAG=$(curl https://api.github.com/repos/markusheiliger/dummy/releases/tags/${{ steps.gitversion.outputs.majorMinorPatch }} -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq ".prerelease")
+          PRERELEASEFLAG=$(curl https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/${{ steps.gitversion.outputs.majorMinorPatch }} -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq ".prerelease")
           PRERELEASETAG=$([ "$PRERELEASEFLAG" = "true" ] && echo "prerelease-" || echo "''" )
         fi
         sed -i "s/^next-version:.*$/next-version: $(git describe --always --abbrev=0 --tags)/" GitVersion.yml 
