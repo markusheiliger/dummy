@@ -4,5 +4,6 @@ namespace dummy
 {
     public class Class1
     {
+        
     }
 }
