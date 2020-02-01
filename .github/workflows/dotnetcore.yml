@@ -18,6 +18,9 @@ jobs:
       with:
         fetch-depth: 0
 
+    - name: TEST
+      run: echo "${{ toJson(github.event) }}"
+      
     - name: Checkout Tags
       run: git fetch -t
         
@@ -50,7 +53,7 @@ jobs:
       working-directory: ${{ env.SOURCE_DIRECTORY }}        
 
     - name: Augment Release (master only)
-      if: steps.gitversion.outputs.branchName == 'master' && github.event_name == 'release' && contains(['created', 'prereleased'], github.event.action)
+      if: steps.gitversion.outputs.branchName == 'master' && github.event_name == 'release' && (github.event.action == 'created' || github.event.action == 'prereleased')
       run: |
         RELEASE_TAG=(echo "${{ github.ref }}" | sed -e "s/.*\///g") # $([[ "${{ github.ref }}" =~ ^refs\/tags\/ ]] && (echo "${{ github.ref }}" | sed -e "s/.*\///g") || echo "")
         RELEASE_URL=$([[ -z "$RELEASE_TAG" ]] && echo "" || (curl https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r ".url"))
