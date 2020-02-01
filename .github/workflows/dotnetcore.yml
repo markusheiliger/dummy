@@ -52,8 +52,7 @@ jobs:
     - name: Validate Release (master only)
       if: steps.gitversion.outputs.branchName == 'master'
       run: |
-        echo "${{ github.ref }}"
-        RELEASE_TAG=$(git describe --always --abbrev=0 --tags)
+        RELEASE_TAG=$(echo "${{ github.ref }}" | sed -e "s/.*\///g")
         RELEASE_URL=$(curl https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r ".url")
         if [[ ! -z "$RELEASE_URL" ]]; then
           if [ -z "${{ steps.gitversion.outputs.preReleaseTag }}" ]; then
@@ -64,5 +63,5 @@ jobs:
             curl --data '{"prerelease": true}' -X PATCH $RELEASE_URL -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}"
           fi
         else
-          echo "Tag $RELEASE_TAG is not assigned to a release"
+          echo "${{ github.ref }} is not assigned to a release"
         fi
