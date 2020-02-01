@@ -52,8 +52,9 @@ jobs:
     - name: Validate Release (master only)
       if: steps.gitversion.outputs.branchName == 'master'
       run: |
-        RELEASE_TAG=$([[ "${{ github.ref }}" =~ ^refs\/tags\/ ]] && (echo "${{ github.ref }}" | sed -e "s/.*\///g") || echo "")
-        RELEASE_URL=$([[ -z "$RELEASE_TAG" ]] && echo "" || (curl https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r ".url"))
+        echo "${{ github.event }}"
+        #RELEASE_TAG=$([[ "${{ github.ref }}" =~ ^refs\/tags\/ ]] && (echo "${{ github.ref }}" | sed -e "s/.*\///g") || echo "")
+        #RELEASE_URL=$([[ -z "$RELEASE_TAG" ]] && echo "" || (curl https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r ".url"))
         if [[ ! -z "$RELEASE_URL" ]]; then
           if [ -z "${{ steps.gitversion.outputs.preReleaseTag }}" ]; then
             echo "Ensure release $RELEASE_TAG is set to major release"
@@ -65,3 +66,6 @@ jobs:
         else
           echo "${{ github.ref }} is not assigned to a release"
         fi
+      env:
+        RELEASE_TAG: '$([[ "${{ github.ref }}" =~ ^refs\/tags\/ ]] && (echo "${{ github.ref }}" | sed -e "s/.*\///g") || echo "")'
+        RELEASE_URL: '$([[ -z "$RELEASE_TAG" ]] && echo "" || (curl https://api.github.com/repos/$GITHUB_REPOSITORY/releases/tags/$RELEASE_TAG -s -H "Authorization: token ${{ secrets.GITHUB_TOKEN }}" | jq -r ".url"))'
